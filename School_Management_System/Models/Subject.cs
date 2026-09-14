@@ -2,7 +2,7 @@
 
 namespace School_Management_System.Models
 {
-    public class Department
+    public class Subject
     {
         public int Id { get; set; }
 
@@ -12,7 +12,10 @@ namespace School_Management_System.Models
         [MaxLength(500)]
         public string? Description { get; set; }
 
-        public ICollection<Student> Students { get; set; } 
-            = new List<Student>();
+        [Range(1, 100)]
+        public int MaxGrade { get; set; }
+
+        public ICollection<Student_Subject> Student_Subjects { get; set; }
+            = new List<Student_Subject>();
     }
 }
