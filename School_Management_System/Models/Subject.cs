@@ -14,8 +14,11 @@ namespace School_Management_System.Models
 
         [Range(1, 100)]
         public int MaxGrade { get; set; }
+        public int TeacherId { get; set; }
 
-        public ICollection<Student_Subject> Student_Subjects { get; set; }
-            = new List<Student_Subject>();
+        public Teacher Teacher { get; set; }
+
+        public ICollection<Enrollment> Enrollments { get; set; }
+            = new List<Enrollment>();
     }
 }

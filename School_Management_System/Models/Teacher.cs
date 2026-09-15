@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace School_Management_System.Models
 {
-    public class Student
+    public class Teacher
     {
         public int Id { get; set; }
 
@@ -16,16 +15,17 @@ namespace School_Management_System.Models
         [Required, EmailAddress, MaxLength(150)]
         public string Email { get; set; }
 
-        [Phone, MaxLength(20)]
+        [MaxLength(20), Phone]
         public string? PhoneNumber { get; set; }
 
-        [Required]
-        public DateTime DateOfBirth { get; set; }
-        public int ClassRoomId { get; set; }
-        public ClassRoom ClassRoom { get; set; }
-        public ICollection<Enrollment> Enrollments { get; set; }
-            = new List<Enrollment>();
+        [Required, Range(0, maximum: int.MaxValue)]
+        public decimal Salary { get; set; }
+        public int DepartmentId { get; set; }
 
+        public Department Department { get; set; }
+
+        public ICollection<Subject> Subjects { get; set; }
+                = new List<Subject>();
 
     }
 }

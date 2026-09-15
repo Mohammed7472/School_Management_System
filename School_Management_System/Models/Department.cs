@@ -11,8 +11,7 @@ namespace School_Management_System.Models
 
         [MaxLength(500)]
         public string? Description { get; set; }
-
-        public ICollection<Student> Students { get; set; } 
-            = new List<Student>();
+        public ICollection<Teacher> Teachers { get; set; }
+            = new List<Teacher>();
     }
 }
