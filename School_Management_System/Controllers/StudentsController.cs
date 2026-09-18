@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using School_Management_System.Data;
 using School_Management_System.Models;
 
@@ -19,13 +19,18 @@ namespace School_Management_System.Controllers
         [HttpGet]
         public ActionResult<List<Student>> GetStudents()
         {
-            return Ok(_context.Students.ToList());
+            var students = _context.Students
+                .Include(s => s.ClassRoom)
+                .ToList();
+            return Ok(students);
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult GetStudentById(int id)
+        public ActionResult<Student> GetStudentById([FromRoute] int id)
         {
-            var student = _context.Students.Find(id);
+            var student = _context.Students
+                .Include(s => s.ClassRoom)
+               .FirstOrDefault(s => s.Id == id);
 
             if (student == null)
             {
@@ -35,11 +40,70 @@ namespace School_Management_System.Controllers
             return Ok(student);
         }
 
-        //[HttpGet("{name:alpha}")]
-        //public Student GetStudentByName(string name)
-        //{
-        //    var student = _context.Students.FirstOrDefault(s => s.FirstName == name);
-        //    return student;
-        //}
+        [HttpPost]
+        public IActionResult Create([FromBody] Student s)
+        {
+            if (s == null)
+                return BadRequest();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            _context.Students.Add(s);
+            _context.SaveChanges();
+
+            return CreatedAtAction(nameof(GetStudentById), new { id = s.Id }, s);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] Student s)
+        {
+            if (s.Id != id)
+                return BadRequest();
+
+            var existingStudent = _context.Students.Find(id);
+
+            if (existingStudent == null)
+                return BadRequest(new { message = $"Student with id={id} not found!" });
+
+            existingStudent.FirstName = s.FirstName;
+            existingStudent.LastName = s.LastName;
+            existingStudent.Email = s.Email;
+            existingStudent.DateOfBirth = s.DateOfBirth;
+            existingStudent.ClassRoomId = s.ClassRoomId;
+
+            _context.SaveChanges();
+
+            return NoContent();
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult Update(int id, string lastname)
+        {
+            var existingStudent = _context.Students.Find(id);
+
+            if (existingStudent == null)
+                return BadRequest(new { message = $"Student with id={id} not found!" });
+
+            existingStudent.LastName = lastname;
+
+            _context.SaveChanges();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var existingStudent = _context.Students.Find(id);
+
+            if (existingStudent == null)
+                return NotFound();
+
+            _context.Students.Remove(existingStudent);
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
