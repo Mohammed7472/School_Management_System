@@ -33,6 +33,9 @@ public class EventsController : ControllerBase
          .Include(e => e.Venue)
          .FirstOrDefault(e => e.Id == id);
 
+        if (eventDetails == null)
+            return NotFound();
+
         return eventDetails;
     }
 
@@ -83,7 +86,7 @@ public class EventsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete([FromRoute] int id)
+    public IActionResult Delete(int id)
     {
         var existingEvent = _context.Events.Find(id);
 
