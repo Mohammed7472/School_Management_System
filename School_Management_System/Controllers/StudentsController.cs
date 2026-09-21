@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using School_Management_System.Data;
+using School_Management_System.DTOs;
+using School_Management_System.Mappings;
 using School_Management_System.Models;
 
 namespace School_Management_System.Controllers
@@ -10,26 +13,37 @@ namespace School_Management_System.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
         public StudentsController()
         {
             _context = new AppDbContext();
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<StudentProfile>();
+            });
+
+            _mapper = config.CreateMapper();
         }
 
         [HttpGet]
-        public ActionResult<List<Student>> GetStudents()
+        public ActionResult<List<StudentDTO>> GetStudents()
         {
             var students = _context.Students
-                .Include(s => s.ClassRoom)
+                .Include(s => s.Classroom)
                 .ToList();
-            return Ok(students);
+
+            var result = _mapper.Map<List<StudentDTO>>(students);
+
+            return result;
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<Student> GetStudentById([FromRoute] int id)
+        public ActionResult<StudentDetailsDTO> GetStudentById([FromRoute] int id)
         {
             var student = _context.Students
-                .Include(s => s.ClassRoom)
+                .Include(s => s.Classroom)
                .FirstOrDefault(s => s.Id == id);
 
             if (student == null)
@@ -37,11 +51,12 @@ namespace School_Management_System.Controllers
                 return NotFound();
             }
 
-            return Ok(student);
+            var result = _mapper.Map<StudentDetailsDTO>(student);
+            return Ok(result);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Student s)
+        public IActionResult Create([FromBody] CreateStudentDTO s)
         {
             if (s == null)
                 return BadRequest();
@@ -49,29 +64,23 @@ namespace School_Management_System.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            _context.Students.Add(s);
+            var student = _mapper.Map<Student>(s);
+
+            _context.Students.Add(student);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetStudentById), new { id = s.Id }, s);
+            return CreatedAtAction(nameof(GetStudentById), new { id = student.Id }, s);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Student s)
+        public IActionResult Update(int id, [FromBody] UpdateStudentDTO s)
         {
-            if (s.Id != id)
-                return BadRequest();
-
             var existingStudent = _context.Students.Find(id);
 
             if (existingStudent == null)
                 return BadRequest(new { message = $"Student with id={id} not found!" });
 
-            existingStudent.FirstName = s.FirstName;
-            existingStudent.LastName = s.LastName;
-            existingStudent.Email = s.Email;
-            existingStudent.DateOfBirth = s.DateOfBirth;
-            existingStudent.ClassRoomId = s.ClassRoomId;
-
+            _mapper.Map(s, existingStudent);
             _context.SaveChanges();
 
             return NoContent();

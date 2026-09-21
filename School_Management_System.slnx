@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="../LINQ/LINQ.csproj" Id="1b287768-a5f1-4027-926c-40f33cf4e339" />
   <Project Path="Event_Management_System/Event_Management_System.csproj" Id="e796335f-6231-4db4-992f-1a32a19e74b2" />
   <Project Path="School_Management_System/School_Management_System.csproj" />
 </Solution>

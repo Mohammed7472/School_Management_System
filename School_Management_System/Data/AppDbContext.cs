@@ -9,6 +9,7 @@ namespace School_Management_System.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Subject> Subjects { get; set; }
+        public DbSet<ClassRoom> Classrooms { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -48,7 +49,7 @@ namespace School_Management_System.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Student>()
-                 .HasOne(s => s.ClassRoom)
+                 .HasOne(s => s.Classroom)
                  .WithMany(c => c.Students)
                  .HasForeignKey(s => s.ClassRoomId)
                  .OnDelete(DeleteBehavior.Restrict);

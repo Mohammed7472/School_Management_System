@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace School_Management_System.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ClassRoom",
+                name: "Classrooms",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -25,7 +25,7 @@ namespace School_Management_System.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClassRoom", x => x.Id);
+                    table.PrimaryKey("PK_Classrooms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,9 +59,9 @@ namespace School_Management_System.Migrations
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Students_ClassRoom_ClassRoomId",
+                        name: "FK_Students_Classrooms_ClassRoomId",
                         column: x => x.ClassRoomId,
-                        principalTable: "ClassRoom",
+                        principalTable: "Classrooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -141,7 +141,7 @@ namespace School_Management_System.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "ClassRoom",
+                table: "Classrooms",
                 columns: new[] { "Id", "Capacity", "GradeLevel", "Name" },
                 values: new object[,]
                 {
@@ -258,7 +258,7 @@ namespace School_Management_System.Migrations
                 name: "Subjects");
 
             migrationBuilder.DropTable(
-                name: "ClassRoom");
+                name: "Classrooms");
 
             migrationBuilder.DropTable(
                 name: "Teacher");

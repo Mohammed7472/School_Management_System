@@ -22,10 +22,8 @@ namespace School_Management_System.Models
         [Required]
         public DateTime DateOfBirth { get; set; }
         public int ClassRoomId { get; set; }
-        public ClassRoom ClassRoom { get; set; }
+        public ClassRoom Classroom { get; set; }
         public ICollection<Enrollment> Enrollments { get; set; }
             = new List<Enrollment>();
-
-
     }
 }

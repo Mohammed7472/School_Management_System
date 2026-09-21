@@ -12,8 +12,8 @@ using School_Management_System.Data;
 namespace School_Management_System.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260915184252_Init")]
-    partial class Init
+    [Migration("20260921054544_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,7 +46,7 @@ namespace School_Management_System.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClassRoom");
+                    b.ToTable("Classrooms");
 
                     b.HasData(
                         new
@@ -403,13 +403,13 @@ namespace School_Management_System.Migrations
 
             modelBuilder.Entity("School_Management_System.Models.Student", b =>
                 {
-                    b.HasOne("School_Management_System.Models.ClassRoom", "ClassRoom")
+                    b.HasOne("School_Management_System.Models.ClassRoom", "Classroom")
                         .WithMany("Students")
                         .HasForeignKey("ClassRoomId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("ClassRoom");
+                    b.Navigation("Classroom");
                 });
 
             modelBuilder.Entity("School_Management_System.Models.Subject", b =>

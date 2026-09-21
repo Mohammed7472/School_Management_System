@@ -39,7 +39,7 @@ public class EventsController : ControllerBase
         return eventDetails;
     }
 
-    [HttpPost("{id}")]
+    [HttpPost]
     public IActionResult Add([FromBody] Event e)
     {
         if (e == null)

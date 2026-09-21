@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace School_Management_System.Models
 {
@@ -15,6 +16,7 @@ namespace School_Management_System.Models
         [Range(1, 100)]
         public int Capacity { get; set; }
 
+        //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] 
         public ICollection<Student> Students { get; set; }
             = new List<Student>();
     }
