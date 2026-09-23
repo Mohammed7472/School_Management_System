@@ -7,6 +7,7 @@ namespace School_Management_System.Data
     public class AppDbContext : DbContext
     {
         public DbSet<Student> Students { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<ClassRoom> Classrooms { get; set; }
