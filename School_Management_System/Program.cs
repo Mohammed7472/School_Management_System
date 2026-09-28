@@ -1,4 +1,9 @@
 
+using Microsoft.EntityFrameworkCore;
+using School_Management_System.Data;
+using School_Management_System.Repos;
+using School_Management_System.Repos.Abstraction;
+
 namespace School_Management_System
 {
     public class Program
@@ -12,6 +17,16 @@ namespace School_Management_System
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddDbContext<AppDbContext>(opt =>
+            {
+                opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+            //builder.Services.AddScoped<IStudentRepository, StudentRepostiory>();
+            //builder.Services.AddScoped<IStudentRepository, StudentListRepository>();
+            builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

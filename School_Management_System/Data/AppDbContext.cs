@@ -11,29 +11,12 @@ namespace School_Management_System.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<ClassRoom> Classrooms { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public AppDbContext(DbContextOptions<AppDbContext> context) : base(context)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=SMS_Demo;Trusted_Connection=True;");
 
-            #region useSeeding
-            //    optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=SMS_Demo;Trusted_Connection=True;")
-            //.UseSeeding((_context, _) =>
-            //{
-            //    if (!_context.Set<Department>().Any())
-            //    {
-            //        _context.Set<Department>().AddRange(
-            //            new Department { Name = "Computer Science", Description = "Department of Computer Science" },
-            //            new Department { Name = "Mathematics", Description = "Department of Mathematics" },
-            //            new Department { Name = "Physics", Description = "Department of Physics" }
-            //        );
-            //    }
-
-            //    _context.SaveChanges();
-            //});
-            #endregion
-
-            base.OnConfiguring(optionsBuilder);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -11,16 +11,32 @@ public class TeachersController : ControllerBase
 {
 
     private readonly AppDbContext _context;
-    public TeachersController()
+    public TeachersController(AppDbContext context)
     {
-        _context = new AppDbContext();
+        _context = context;
     }
 
-    [HttpGet("test-sum")]
-    public IActionResult GetTotalSalaries()
+    [HttpGet]
+    public IActionResult GetAllTeachers()
     {
         var result = _context.Teachers
-            .Sum(t => t.Salary);
+            .ToList();
+
+        return Ok(result);
+    }
+    [HttpGet("{id}")]
+    public IActionResult GetTeacherDetails(int id)
+    {
+        var result = _context.Teachers
+            .Select(t => new
+            {
+                Id = t.Id,
+                Name = t.FirstName + " " + t.LastName,
+                Phone = t.PhoneNumber,
+                Salary = t.Salary.ToString("C2"),
+                Deaprtment = t.Department.Name
+            })
+            .FirstOrDefault(t => t.Id == id);
 
         return Ok(result);
     }
