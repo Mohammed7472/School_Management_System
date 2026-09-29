@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace School_Management_System.Models
 {
-    [Index(nameof(StudentId), nameof(SubjectId), IsUnique = true)]
+    //[Index(nameof(StudentId), nameof(SubjectId), IsUnique = true)]
     public class Enrollment
     {
         public int Id { get; set; }
