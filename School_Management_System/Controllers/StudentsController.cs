@@ -8,6 +8,7 @@ using School_Management_System.Mappings;
 using School_Management_System.Models;
 using School_Management_System.Repos;
 using School_Management_System.Repos.Abstraction;
+using School_Management_System.UnitWork;
 
 namespace School_Management_System.Controllers
 {
@@ -15,12 +16,12 @@ namespace School_Management_System.Controllers
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        private readonly IStudentRepository _repo;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public StudentsController(IStudentRepository repo, IMapper mapper)
+        public StudentsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repo = repo;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -28,7 +29,7 @@ namespace School_Management_System.Controllers
         [HttpGet]
         public ActionResult<List<StudentDTO>> GetStudents()
         {
-            var result = _repo.GetAll()
+            var result = _unitOfWork.Students.GetAll()
                 .Select(s => new StudentDTO
                 {
                     Id = s.Id,
@@ -54,7 +55,7 @@ namespace School_Management_System.Controllers
 
             //var result = _mapper.Map<StudentDetailsDTO>(student);
 
-            var result = _repo.GetById(id);
+            var result = _unitOfWork.Students.GetById(id);
 
 
             if (result == null)
@@ -76,8 +77,8 @@ namespace School_Management_System.Controllers
                 PhoneNumber = dto.PhoneNumber,
             };
 
-            _repo.Create(student);
-            _repo.Save();
+            _unitOfWork.Students.Create(student);
+            _unitOfWork.Students.Save();
 
             return CreatedAtAction(nameof(GetStudentById), new { id = student.Id }, student);
         }
@@ -85,14 +86,14 @@ namespace School_Management_System.Controllers
         [HttpPut]
         public IActionResult Update(int id, UpdateStudentDTO dto)
         {
-            var existingStudent = _repo.GetById(id);
+            var existingStudent = _unitOfWork.Students.GetById(id);
 
             if (existingStudent == null)
                 return BadRequest();
 
             var student = _mapper.Map(dto, existingStudent);
-            _repo.Update(student);
-            _repo.Save();
+            _unitOfWork.Students.Update(student);
+            _unitOfWork.SaveChanges();
 
             return NoContent();
         }
@@ -100,7 +101,7 @@ namespace School_Management_System.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            _repo.Delete(id);
+            _unitOfWork.Students.Delete(id);
             return NoContent();
         }
 
@@ -108,7 +109,7 @@ namespace School_Management_System.Controllers
 
         public IActionResult GetByClassroom(int classroomId)
         {
-            var result = _repo.SearchByClassroom(classroomId);
+            var result = _unitOfWork.Students.SearchByClassroom(classroomId);
             return Ok(result);
         }
         //[HttpPost]

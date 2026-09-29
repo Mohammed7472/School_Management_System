@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using School_Management_System.Data;
 using School_Management_System.Repos;
 using School_Management_System.Repos.Abstraction;
+using School_Management_System.UnitWork;
 
 namespace School_Management_System
 {
@@ -27,6 +28,7 @@ namespace School_Management_System
             //builder.Services.AddScoped<IStudentRepository, StudentListRepository>();
             builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
             builder.Services.AddScoped<IStudentRepository, StudentRepostiory>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
