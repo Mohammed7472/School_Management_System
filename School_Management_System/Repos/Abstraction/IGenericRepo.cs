@@ -11,4 +11,5 @@ public interface IGenericRepo<TEntity> where TEntity : class
     public void Update(TEntity entity);
     public void Delete(int id);
     public void Save();
+
 }

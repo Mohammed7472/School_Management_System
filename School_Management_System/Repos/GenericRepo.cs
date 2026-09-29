@@ -45,4 +45,5 @@ public class GenericRepo<TEntity> : IGenericRepo<TEntity> where TEntity : class
     {
         context.SaveChanges();
     }
+
 }

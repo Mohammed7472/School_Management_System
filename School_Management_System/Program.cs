@@ -22,9 +22,11 @@ namespace School_Management_System
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
             //builder.Services.AddScoped<IStudentRepository, StudentRepostiory>();
             //builder.Services.AddScoped<IStudentRepository, StudentListRepository>();
             builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+            builder.Services.AddScoped<IStudentRepository, StudentRepostiory>();
 
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
