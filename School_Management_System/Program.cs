@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using School_Management_System.Data;
 using School_Management_System.Repos;
 using School_Management_System.Repos.Abstraction;
-
+using School_Management_System.UnitWork;
 namespace School_Management_System
 {
     public class Program
@@ -22,9 +22,10 @@ namespace School_Management_System
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            //builder.Services.AddScoped<IStudentRepository, StudentRepostiory>();
-            //builder.Services.AddScoped<IStudentRepository, StudentListRepository>();
+
             builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+            builder.Services.AddScoped<IStudentRepository, StudentRepostiory>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
@@ -45,8 +46,25 @@ namespace School_Management_System
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+            #region Custom_Middleware
+            app.Use(async (context, next) =>
+            {
+                Console.WriteLine("1) Before");
+                await next();
+                Console.WriteLine("1) After");
+            });
+            app.Use(async (context, next) =>
+            {
+                Console.WriteLine("2) Before");
+                await next();
+                Console.WriteLine("2) After");
+            });
+            app.Run(async (context) =>
+            {
+                Console.WriteLine("Terminate");
+            });
+            #endregion
 
             app.Run();
         }

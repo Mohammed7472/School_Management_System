@@ -41,8 +41,4 @@ public class GenericRepo<TEntity> : IGenericRepo<TEntity> where TEntity : class
             context.Set<TEntity>().Remove(dbEntity);
         }
     }
-    public void Save()
-    {
-        context.SaveChanges();
-    }
 }
