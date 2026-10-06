@@ -1,19 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using School_Management_System.Data;
 using School_Management_System.DTOs;
-using School_Management_System.Mappings;
 using School_Management_System.Models;
-using School_Management_System.Repos;
-using School_Management_System.Repos.Abstraction;
 using School_Management_System.UnitWork;
 
 namespace School_Management_System.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class StudentsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;

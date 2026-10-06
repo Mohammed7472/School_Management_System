@@ -1,9 +1,11 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using School_Management_System.Data;
 using School_Management_System.Repos;
 using School_Management_System.Repos.Abstraction;
 using School_Management_System.UnitWork;
+using System.Diagnostics;
 
 namespace School_Management_System
 {
@@ -46,13 +48,34 @@ namespace School_Management_System
             }
 
             app.UseHttpsRedirection();
+            // inline component middleware
+            app.Use(async (context, next) =>
+            {
+                // logic
+                Stopwatch s = new Stopwatch();
+                s.Start();
+                Console.WriteLine($"Method: {context.Request.Method}");
+
+                await next();
+
+                Console.WriteLine($"Time : {s.ElapsedMilliseconds} ms");
+
+            });
+
+
 
             app.UseAuthorization();
 
 
+
+
             app.MapControllers();
 
+
             app.Run();
+
+
         }
+
     }
 }
