@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using School_Management_System.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using School_Management_System.Models;
-using School_Management_System.Repos.Abstraction;
+using School_Management_System.UnitWork;
 
 namespace School_Management_System.Controllers;
 
@@ -10,45 +8,46 @@ namespace School_Management_System.Controllers;
 [ApiController]
 public class DepartmentsController : ControllerBase
 {
-    private readonly IGenericRepo<Department> _repo;
+    private readonly IUnitOfWork unitOfWork;
 
-    public DepartmentsController(IGenericRepo<Department> repo)
+    public DepartmentsController(IUnitOfWork unitOfWork)
     {
-        _repo = repo;
+        this.unitOfWork = unitOfWork;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(_repo.GetAll());
+        var result = unitOfWork.Departments.GetAll();
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        return Ok(_repo.GetById(id));
+        return Ok(unitOfWork.Departments.GetById(id));
     }
 
     [HttpPost]
     public IActionResult Create(Department dept)
     {
-        _repo.Create(dept);
-        _repo.Save();
+        unitOfWork.Departments.Create(dept);
+        unitOfWork.SaveChanges();
         return CreatedAtAction(nameof(GetById), new { id = dept.Id }, dept);
     }
 
     [HttpPut]
     public IActionResult Update(Department dept)
     {
-        _repo.Update(dept);
-        _repo.Save();
+        unitOfWork.Departments.Update(dept);
+        unitOfWork.SaveChanges();
         return NoContent();
     }
     [HttpDelete]
-    public IActionResult Update(int id)
+    public IActionResult Delete(int id)
     {
-        _repo.Delete(id);
-        _repo.Save();
+        unitOfWork.Departments.Delete(id);
+        unitOfWork.SaveChanges();
         return NoContent();
     }
 }
