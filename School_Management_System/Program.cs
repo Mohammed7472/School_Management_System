@@ -1,11 +1,14 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using School_Management_System.Data;
 using School_Management_System.Repos;
 using School_Management_System.Repos.Abstraction;
 using School_Management_System.UnitWork;
 using System.Diagnostics;
+using System.Text;
 
 namespace School_Management_System
 {
@@ -31,8 +34,33 @@ namespace School_Management_System
             builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
             builder.Services.AddScoped<IStudentRepository, StudentRepostiory>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+            //builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-            builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+
+            #region JWTValidationService
+            builder.Services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                //opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                //opt.DefaultForbidScheme = 
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = builder.Configuration["JWT:Issuer"],
+                    ValidAudience = builder.Configuration["JWT:Audience"],
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
+                        builder.Configuration["JWT:Key"]
+                        )),
+                };
+            });
+            #endregion
+
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

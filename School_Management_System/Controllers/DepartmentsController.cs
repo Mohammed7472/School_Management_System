@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using School_Management_System.Models;
 using School_Management_System.UnitWork;
 
@@ -16,6 +17,7 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public IActionResult GetAll()
     {
         var result = unitOfWork.Departments.GetAll();
@@ -23,6 +25,7 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public IActionResult GetById(int id)
     {
         return Ok(unitOfWork.Departments.GetById(id));

@@ -12,7 +12,7 @@ using School_Management_System.Data;
 namespace School_Management_System.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260921054544_init")]
+    [Migration("20261007072336_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -24,6 +24,37 @@ namespace School_Management_System.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("School_Management_System.Models.ApplicationUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationUsers");
+                });
 
             modelBuilder.Entity("School_Management_System.Models.ClassRoom", b =>
                 {
@@ -138,7 +169,7 @@ namespace School_Management_System.Migrations
                     b.HasIndex("StudentId", "SubjectId")
                         .IsUnique();
 
-                    b.ToTable("Enrollment");
+                    b.ToTable("Enrollments");
 
                     b.HasData(
                         new
@@ -347,7 +378,7 @@ namespace School_Management_System.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Teacher");
+                    b.ToTable("Teachers");
 
                     b.HasData(
                         new

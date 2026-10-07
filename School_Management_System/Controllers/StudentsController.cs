@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿//using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using School_Management_System.DTOs;
@@ -13,12 +13,12 @@ namespace School_Management_System.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        //private readonly IMapper _mapper;
 
-        public StudentsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public StudentsController(IUnitOfWork unitOfWork) // IMapper mapper
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            //_mapper = mapper;
         }
 
 
@@ -79,20 +79,20 @@ namespace School_Management_System.Controllers
             return CreatedAtAction(nameof(GetStudentById), new { id = student.Id }, student);
         }
 
-        [HttpPut]
-        public IActionResult Update(int id, UpdateStudentDTO dto)
-        {
-            var existingStudent = _unitOfWork.Students.GetById(id);
+        //[HttpPut]
+        //public IActionResult Update(int id, UpdateStudentDTO dto)
+        //{
+        //    var existingStudent = _unitOfWork.Students.GetById(id);
 
-            if (existingStudent == null)
-                return BadRequest();
+        //    if (existingStudent == null)
+        //        return BadRequest();
 
-            var student = _mapper.Map(dto, existingStudent);
-            _unitOfWork.Students.Update(student);
-            _unitOfWork.SaveChanges();
+        //    var student = _mapper.Map(dto, existingStudent);
+        //    _unitOfWork.Students.Update(student);
+        //    _unitOfWork.SaveChanges();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         [HttpDelete]
         public IActionResult Delete(int id)

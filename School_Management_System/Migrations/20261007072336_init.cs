@@ -14,6 +14,22 @@ namespace School_Management_System.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ApplicationUsers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Classrooms",
                 columns: table => new
                 {
@@ -67,7 +83,7 @@ namespace School_Management_System.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Teacher",
+                name: "Teachers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -81,9 +97,9 @@ namespace School_Management_System.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Teacher", x => x.Id);
+                    table.PrimaryKey("PK_Teachers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Teacher_Departments_DepartmentId",
+                        name: "FK_Teachers_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
@@ -105,15 +121,15 @@ namespace School_Management_System.Migrations
                 {
                     table.PrimaryKey("PK_Subjects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Subjects_Teacher_TeacherId",
+                        name: "FK_Subjects_Teachers_TeacherId",
                         column: x => x.TeacherId,
-                        principalTable: "Teacher",
+                        principalTable: "Teachers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Enrollment",
+                name: "Enrollments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -125,15 +141,15 @@ namespace School_Management_System.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enrollment", x => x.Id);
+                    table.PrimaryKey("PK_Enrollments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Enrollment_Students_StudentId",
+                        name: "FK_Enrollments_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Enrollment_Subjects_SubjectId",
+                        name: "FK_Enrollments_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
                         principalColumn: "Id",
@@ -170,7 +186,7 @@ namespace School_Management_System.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Teacher",
+                table: "Teachers",
                 columns: new[] { "Id", "DepartmentId", "Email", "FirstName", "LastName", "PhoneNumber", "Salary" },
                 values: new object[,]
                 {
@@ -190,7 +206,7 @@ namespace School_Management_System.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Enrollment",
+                table: "Enrollments",
                 columns: new[] { "Id", "EnrollmentDate", "Grade", "StudentId", "SubjectId" },
                 values: new object[,]
                 {
@@ -207,14 +223,14 @@ namespace School_Management_System.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_StudentId_SubjectId",
-                table: "Enrollment",
+                name: "IX_Enrollments_StudentId_SubjectId",
+                table: "Enrollments",
                 columns: new[] { "StudentId", "SubjectId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_SubjectId",
-                table: "Enrollment",
+                name: "IX_Enrollments_SubjectId",
+                table: "Enrollments",
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
@@ -234,13 +250,13 @@ namespace School_Management_System.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Teacher_DepartmentId",
-                table: "Teacher",
+                name: "IX_Teachers_DepartmentId",
+                table: "Teachers",
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Teacher_Email",
-                table: "Teacher",
+                name: "IX_Teachers_Email",
+                table: "Teachers",
                 column: "Email",
                 unique: true);
         }
@@ -249,7 +265,10 @@ namespace School_Management_System.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Enrollment");
+                name: "ApplicationUsers");
+
+            migrationBuilder.DropTable(
+                name: "Enrollments");
 
             migrationBuilder.DropTable(
                 name: "Students");
@@ -261,7 +280,7 @@ namespace School_Management_System.Migrations
                 name: "Classrooms");
 
             migrationBuilder.DropTable(
-                name: "Teacher");
+                name: "Teachers");
 
             migrationBuilder.DropTable(
                 name: "Departments");

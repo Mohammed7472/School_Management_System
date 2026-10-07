@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
     public DbSet<Venue> Venues { get; set; }
     public DbSet<Attendee> Attendees { get; set; }
     public DbSet<Registration> Registrations { get; set; }
+    //public DbSet<> Registrations { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

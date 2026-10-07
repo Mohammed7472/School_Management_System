@@ -22,6 +22,37 @@ namespace School_Management_System.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("School_Management_System.Models.ApplicationUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationUsers");
+                });
+
             modelBuilder.Entity("School_Management_System.Models.ClassRoom", b =>
                 {
                     b.Property<int>("Id")
@@ -135,7 +166,7 @@ namespace School_Management_System.Migrations
                     b.HasIndex("StudentId", "SubjectId")
                         .IsUnique();
 
-                    b.ToTable("Enrollment");
+                    b.ToTable("Enrollments");
 
                     b.HasData(
                         new
@@ -344,7 +375,7 @@ namespace School_Management_System.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Teacher");
+                    b.ToTable("Teachers");
 
                     b.HasData(
                         new

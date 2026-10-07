@@ -12,6 +12,7 @@ namespace School_Management_System.Data
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<ClassRoom> Classrooms { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
 
         public AppDbContext(DbContextOptions<AppDbContext> context) : base(context)
@@ -72,6 +73,10 @@ namespace School_Management_System.Data
 
             modelBuilder.Entity<Enrollment>()
                 .HasIndex(e => new { e.StudentId, e.SubjectId })
+                .IsUnique();
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasIndex(u => u.Email)
                 .IsUnique();
 
             // Seeding Data
